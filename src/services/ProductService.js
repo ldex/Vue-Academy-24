@@ -21,10 +21,16 @@ apiClient.interceptors.response.use(
 const RESOURCE_NAME = 'products';
 
 export default {
+
   getProducts() {
     let sortParams = `?$orderby=ModifiedDate%20desc`;
     return apiClient
             .get(RESOURCE_NAME + sortParams)
             .then(products => new Promise(resolve => setTimeout(() => resolve(products), 200)))  // slowing down the response for testing purpose...
+  },
+
+  getProduct(id) {
+    return apiClient.get(`${RESOURCE_NAME}/${id}`)
   }
+
 }

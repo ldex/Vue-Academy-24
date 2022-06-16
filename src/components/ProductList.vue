@@ -16,7 +16,7 @@
           discontinued: product.discontinued,
           selected: product === selectedProduct,
         }"
-        @click="selectedProduct = product"
+        @click="onSelect(product)"
         :title="JSON.stringify(product)"
       >
         <span class="name">{{ product.name }}</span>
@@ -31,18 +31,11 @@
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
       Next &gt;
     </button>
-
-    <product-details :product="selectedProduct"></product-details>
   </div>
 </template>
 
 <script>
-import ProductDetails from "@/components/ProductDetails.vue";
-
 export default {
-  components: {
-    ProductDetails,
-  },
   props: {
     products: {
       type: Array,
@@ -64,6 +57,19 @@ export default {
       pageNumber: 1,
     };
   },
+  watch: {
+    // reset pagination when filtering
+    filterName() {
+      this.pageNumber = 1;
+    },
+    // reset pagination when sorting
+    sortName() {
+      this.pageNumber = 1;
+    },
+    sortDir() {
+      this.pageNumber = 1;
+    },
+  },
   methods: {
     sort(s) {
       //if s == current sort, reverse order
@@ -80,6 +86,9 @@ export default {
       this.pageNumber--;
       this.selectedProduct = null;
     },
+    onSelect(product) {
+      this.$router.push({ name: "product", params: { id: product.id } });
+    }
   },
   computed: {
     filteredProducts() {
