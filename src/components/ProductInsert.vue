@@ -129,7 +129,6 @@
 </template>
 
 <script>
-import ProductService from "@/services/ProductService.js";
 import { required, minLength, maxLength, between } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 const validUrlRegex =
@@ -186,13 +185,12 @@ export default {
           discontinued: this.product.discontinued,
           fixedPrice: this.product.fixedPrice,
         };
-        console.log(newProduct);
-        ProductService.insertProduct(newProduct)
-          .then(() => {
-            this.$router.push({ name: "products" });
+        this.$store.dispatch('addProduct', newProduct)
+        .then(() => {
+          this.$router.push({ name: 'products'});
           })
-          .catch((error) => {
-            console.log("There was an error:", error.response);
+          .catch(error => {
+            console.log('There was an error:', error.response)
           });
       }
     },

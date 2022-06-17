@@ -8,22 +8,16 @@
       <button @click="sort('modifiedDate')">Date</button>
       <span>Filter by name: <input v-model="filterName" /></span>
     </fieldset>
-    <ul class="products">
-      <li
-        v-for="product in sortedFilteredPaginatedProducts"
-        v-bind:key="product.id"
-        v-bind:class="{
-          discontinued: product.discontinued,
-          selected: product === selectedProduct,
-        }"
-        @click="onSelect(product)"
-        :title="JSON.stringify(product)"
-      >
-        <span class="name">{{ product.name }}</span>
-        <span class="description">{{ product.description }}</span>
-        <span class="price">{{ product.price }}</span>
-      </li>
-    </ul>
+      <ul class="products">
+          <li v-for="product in sortedFilteredPaginatedProducts" v-bind:key="product.id"
+              v-bind:class='{ discontinued: product.discontinued, selected: product === selectedProduct }'
+              :title="JSON.stringify(product)"
+              @click="onSelect(product)">
+              <slot :product="product">
+                {{ product.name }}
+              </slot>
+          </li>
+      </ul>
     <div class="right">
       <router-link to="/product/insert">Create new product...</router-link>
     </div>
@@ -50,16 +44,6 @@ export default {
       default: 5,
     },
   },
-  data() {
-    return {
-      title: "Products",
-      selectedProduct: null,
-      filterName: "",
-      sortName: "modifiedDate",
-      sortDir: "desc",
-      pageNumber: 1,
-    };
-  },
   watch: {
     // reset pagination when filtering
     filterName() {
@@ -72,6 +56,16 @@ export default {
     sortDir() {
       this.pageNumber = 1;
     },
+  },
+  data() {
+    return {
+      title: "Products",
+      selectedProduct: null,
+      filterName: "",
+      sortName: "modifiedDate",
+      sortDir: "desc",
+      pageNumber: 1,
+    };
   },
   methods: {
     sort(s) {
