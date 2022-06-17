@@ -24,6 +24,9 @@
         <span class="price">{{ product.price }}</span>
       </li>
     </ul>
+    <div class="right">
+      <router-link to="/product/insert">Create new product...</router-link>
+    </div>
     <button @click="prevPage" :disabled="pageNumber === 1">
       &lt; Previous
     </button>
@@ -88,7 +91,7 @@ export default {
     },
     onSelect(product) {
       this.$router.push({ name: "product", params: { id: product.id } });
-    }
+    },
   },
   computed: {
     filteredProducts() {

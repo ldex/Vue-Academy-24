@@ -1,47 +1,50 @@
 <template>
-    <div>
-        <section v-if="error">
-            {{error.message}}
-        </section>
-        <section v-else>
-        <div v-if="loading">
-            <h2 class="loading">Loading products...</h2>
-        </div>
-        <product-list v-else :products="products" :page-size="5"></product-list>
-        </section>
-    </div>
+  <div>
+    <section v-if="error">
+      {{ error.message }}
+    </section>
+    <section v-else>
+      <div v-if="loading">
+        <h2 class="loading">Loading products...</h2>
+      </div>
+      <product-list v-else :products="products" :page-size="5"></product-list>
+    </section>
+  </div>
 </template>
 
 <script>
-import ProductList from '@/components/ProductList.vue';
-import ProductService from '@/services/ProductService.js';
+import ProductList from "@/components/ProductList.vue";
+import ProductService from "@/services/ProductService.js";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    ProductList
+    ProductList,
   },
   data() {
     return {
       products: [],
       error: null,
-      loading: false
-    }
+      loading: false,
+    };
   },
-  created () {
+  errorCaptured: function (error) {
+    console.error("Error in component: ", error.message);
+    return false;
+  },
+  created() {
     this.loading = true;
     ProductService.getProducts()
-      .then(response => {
+      .then((response) => {
         this.products = response.data;
       })
-      .catch(error => {
+      .catch((error) => {
         this.error = error;
       })
-      .finally(() => this.loading = false);
+      .finally(() => (this.loading = false));
   },
-}
+};
 </script>
 
 <style lang="css" scoped>
-
 </style>
