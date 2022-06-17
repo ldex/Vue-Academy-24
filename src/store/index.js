@@ -32,6 +32,9 @@ export default createStore({
     },
     SET_PRODUCTS(state, payload) {
       state.products = payload;
+    },
+    REMOVE_PRODUCT(state, id) {
+      state.products = state.products.filter(product => product.id != id);
     }
   },
   actions: {
@@ -56,6 +59,11 @@ export default createStore({
         .then(() => {
           commit('ADD_PRODUCT', newProduct);
         })
+    },
+    deleteProduct({ commit }, product) {
+      return ProductService.deleteProduct(product).then(() => {
+        commit("REMOVE_PRODUCT", product.id);
+      });
     },
     fetchProducts({commit}) {
       commit('SET_LOADING_STATUS');
