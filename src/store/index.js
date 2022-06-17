@@ -65,13 +65,9 @@ export default createStore({
         commit("REMOVE_PRODUCT", product.id);
       });
     },
-    fetchProducts({commit}) {
-      commit('SET_LOADING_STATUS');
-      return ProductService.getProducts()
-        .then(response => {
-          commit('SET_PRODUCTS', response.data);
-        })
-        .finally(() => commit('SET_LOADING_STATUS'));
+    async fetchProducts({commit}) {
+      const response = await ProductService.getProducts()
+      commit('SET_PRODUCTS', response.data);
     },
     fetchProduct({commit,getters}, id) {
       let p = getters.getProductById(id);
